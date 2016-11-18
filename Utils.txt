@@ -1,0 +1,26 @@
+Export all tables to json
+
+DECLARE @bcpCommand varchar(2000),
+        @tableName varchar(50),
+        @FileName varchar(100)
+
+DECLARE iterator CURSOR LOCAL FOR 
+    SELECT TABLE_NAME FROM information_schema.tables WHERE TABLE_TYPE='BASE TABLE' ORDER BY 1 
+
+OPEN iterator 
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+	FETCH NEXT FROM iterator INTO
+		@tableName
+			
+	SET @bcpCommand = 'bcp "SELECT * FROM DBNAME..' + @tableName + 
+		' FOR JSON PATH" queryout c:\temp\' + @tableName + '.txt -c -r -S .\SQLEXPRESS -T '
+
+	--PRINT @bcpCommand
+	exec master..xp_cmdshell @bcpCommand
+END
+
+CLOSE iterator
+
+
