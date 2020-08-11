@@ -1,8 +1,0 @@
-Steps to start .netcore webapi with yeoman
--yo aspnet
--delete dockerfile
--yo docker
--delete backup files
--dotnet migrate
--dotnet restore
--dotnet run
